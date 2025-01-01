@@ -1,0 +1,46 @@
+name: Validate Model
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on PR to the main branch
+
+jobs:
+  test_model:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install torch torchvision
+          pip install nbconvert jupyter tqdm
+
+      # Step 4: Run the Jupyter notebook and execute checks
+      - name: Run model validation notebook
+        run: |
+          jupyter nbconvert --to notebook --execute model_validation.ipynb --output result.ipynb
+
+      # Step 5: Check notebook execution status
+      - name: Check notebook execution
+        run: |
+          if grep -q "AssertionError" result.ipynb; then
+            echo "Model validation failed. Check the error logs."
+            exit 1
+          else
+            echo "Model validation passed."
+          fi
