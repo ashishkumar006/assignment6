@@ -23,17 +23,16 @@ jobs:
         with:
           python-version: '3.8'
 
-      # Step 3: Install dependencies
+      # Step 3: Install dependencies directly
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
           pip install torch torchvision
           pip install nbconvert jupyter tqdm
 
       # Step 4: Run the Jupyter notebook and execute checks
       - name: Run model validation notebook
         run: |
-          jupyter nbconvert --to notebook --execute model_validation.ipynb --output result.ipynb
+          jupyter nbconvert --to notebook --execute Assignment_6.ipynb --output result.ipynb
 
       # Step 5: Check notebook execution status
       - name: Check notebook execution
