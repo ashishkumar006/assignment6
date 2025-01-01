@@ -35,12 +35,23 @@ jobs:
         run: |
           jupyter nbconvert --to notebook --execute model_validation.ipynb --output result.ipynb
 
-      # Step 5: Check notebook execution status
+      # Step 5: Check notebook execution status (using Python for better validation)
       - name: Check notebook execution
         run: |
-          if grep -q "AssertionError" result.ipynb; then
-            echo "Model validation failed. Check the error logs."
-            exit 1
-          else
-            echo "Model validation passed."
-          fi
+          # Check if there were any errors during the execution
+          python -c "
+import nbformat
+
+# Load the executed notebook
+with open('result.ipynb', 'r') as f:
+    notebook = nbformat.read(f, as_version=4)
+
+# Check for any output cells with 'error' status
+for cell in notebook.cells:
+    if cell.cell_type == 'code' and 'outputs' in cell:
+        for output in cell['outputs']:
+            if output.output_type == 'error':
+                raise Exception(f'Error found in notebook: {output}')
+
+print('Model validation passed.')
+"
