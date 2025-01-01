@@ -35,7 +35,7 @@ jobs:
         run: |
           jupyter nbconvert --to notebook --execute model_validation.ipynb --output result.ipynb
 
-      # Step 5: Check notebook execution status (using Python for better validation)
+      # Step 5: Check notebook execution status
       - name: Check notebook execution
         run: |
           python -c "
