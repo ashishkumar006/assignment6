@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.8'
 
-      # Step 3: Install dependencies directly
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           pip install torch torchvision
