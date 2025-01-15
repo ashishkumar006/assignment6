@@ -1,5 +1,9 @@
 import torch
 import torch.nn as nn
+from __future__ import print_function
+import torch.nn.functional as F
+import torch.optim as optim
+from torchvision import datasets, transforms
 
 def check_batchnorm(model):
     for layer in model.modules():
@@ -23,17 +27,36 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 # Example model (replace this with loading your model)
-class ExampleModel(nn.Module):
+class Net(nn.Module):
     def __init__(self):
-        super(ExampleModel, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3)
-        self.fc1 = nn.Linear(32*28*28, 10)
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(1, 10, 3, padding=1) #input -? OUtput? RF
+        self.conv2 = nn.Conv2d(10, 20, 3, padding=1)
+        self.pool1 = nn.MaxPool2d(2, 2)
+        self.conv3 = nn.Conv2d(20, 10, 3, padding=1)
+        self.conv4 = nn.Conv2d(10, 10, 3, padding=1)
+        self.pool2 = nn.MaxPool2d(2, 2)
+        self.conv5 = nn.Conv2d(10, 10, 3)
+        self.conv6 = nn.Conv2d(10, 10, 3)
+        self.conv7 = nn.Conv2d(10, 120, 3)
+        self.fc = nn.Linear(120, 10)
+
+        #Dropout layers
+        self.dropout= nn.Dropout(0.1)
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = x.view(-1, 32*28*28)
-        x = self.fc1(x)
-        return x
+        x = self.pool1(F.relu(self.conv2(F.relu(self.conv1(x)))))
+        x = self.dropout(x)
+        x = self.pool2(F.relu(self.conv4(F.relu(self.conv3(x)))))
+        x = self.dropout(x)
+        x = F.relu(self.conv6(F.relu(self.conv5(x))))
+        x = self.dropout(x)
+        x = F.relu(self.conv7(x))
+        x = x.view(x.size(0), -1) #flatten tensor
+        x = self.fc(x)
+        x = self.dropout(x)
+
+        return F.log_softmax(x,dim=1)
 
 # Load your model here (ExampleModel is just for illustration)
 model = ExampleModel()
