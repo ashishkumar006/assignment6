@@ -58,8 +58,8 @@ class Net(nn.Module):
 
         return F.log_softmax(x,dim=1)
 
-# Load your model here (ExampleModel is just for illustration)
-model = ExampleModel()
+# Load your model here (replace ExampleModel with Net)
+model = Net()
 
 batchnorm_used = check_batchnorm(model)
 dropout_used = check_dropout(model)
