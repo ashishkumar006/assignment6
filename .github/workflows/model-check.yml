@@ -1,0 +1,33 @@
+name: Model Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  model_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install jupyter
+
+      - name: Convert notebook to Python script
+        run: jupyter nbconvert --to script notebook.ipynb
+
+      - name: Run model checks
+        run: python check_model.py

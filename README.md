@@ -23,6 +23,7 @@ Dropout layers are used throughout the model with a dropout rate of 10% to preve
 
 - **Test Accuracy**: Greater than **99.4%** on the MNIST test dataset.
 - **Parameters**: The model has fewer than **20,000 parameters**, making it efficient in terms of model size and computational requirements.
+- Achieves a test accuracy of 99.44% at epoch 11
 
 ## Training Details
 
