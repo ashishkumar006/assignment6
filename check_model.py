@@ -30,33 +30,41 @@ def count_parameters(model):
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 10, 3, padding=1) #input -? OUtput? RF
+        self.conv1 = nn.Conv2d(1, 10, 3, padding=1)  # input -? Output? RF
+        self.bn1 = nn.BatchNorm2d(10)  # BatchNorm after conv1
         self.conv2 = nn.Conv2d(10, 20, 3, padding=1)
+        self.bn2 = nn.BatchNorm2d(20)  # BatchNorm after conv2
         self.pool1 = nn.MaxPool2d(2, 2)
         self.conv3 = nn.Conv2d(20, 10, 3, padding=1)
+        self.bn3 = nn.BatchNorm2d(10)  # BatchNorm after conv3
         self.conv4 = nn.Conv2d(10, 10, 3, padding=1)
+        self.bn4 = nn.BatchNorm2d(10)  # BatchNorm after conv4
         self.pool2 = nn.MaxPool2d(2, 2)
         self.conv5 = nn.Conv2d(10, 10, 3)
+        self.bn5 = nn.BatchNorm2d(10)  # BatchNorm after conv5
         self.conv6 = nn.Conv2d(10, 10, 3)
+        self.bn6 = nn.BatchNorm2d(10)  # BatchNorm after conv6
         self.conv7 = nn.Conv2d(10, 120, 3)
+        self.bn7 = nn.BatchNorm2d(120)  # BatchNorm after conv7
         self.fc = nn.Linear(120, 10)
 
-        #Dropout layers
-        self.dropout= nn.Dropout(0.1)
+        # Dropout layers
+        self.dropout = nn.Dropout(0.1)
 
     def forward(self, x):
-        x = self.pool1(F.relu(self.conv2(F.relu(self.conv1(x)))))
+        x = self.pool1(F.relu(self.bn2(self.conv2(F.relu(self.bn1(self.conv1(x)))))))
         x = self.dropout(x)
-        x = self.pool2(F.relu(self.conv4(F.relu(self.conv3(x)))))
+        x = self.pool2(F.relu(self.bn4(self.conv4(F.relu(self.bn3(self.conv3(x)))))))
         x = self.dropout(x)
-        x = F.relu(self.conv6(F.relu(self.conv5(x))))
+        x = F.relu(self.bn6(self.conv6(F.relu(self.bn5(self.conv5(x))))))
         x = self.dropout(x)
-        x = F.relu(self.conv7(x))
-        x = x.view(x.size(0), -1) #flatten tensor
+        x = F.relu(self.bn7(self.conv7(x)))
+        x = x.view(x.size(0), -1)  # flatten tensor
         x = self.fc(x)
         x = self.dropout(x)
 
-        return F.log_softmax(x,dim=1)
+        return F.log_softmax(x, dim=1)
+
 
 # Load your model here (replace ExampleModel with Net)
 model = Net()
