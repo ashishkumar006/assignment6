@@ -2,28 +2,57 @@
 
 This is a convolutional neural network (CNN) model implemented using PyTorch for classifying handwritten digits from the MNIST dataset. The model achieves an accuracy greater than **99.4%** on test dataset in less than **20 epochs** and has fewer than **20,000 parameters**, making it both efficient and accurate.
 
+Number of parameters=18,970
+
+
 ## Model Architecture
 
-The model consists of the following layers:
-- **Conv1**: Convolutional layer with 10 output channels, kernel size 3, and padding of 1.
-- **Conv2**: Convolutional layer with 20 output channels, kernel size 3, and padding of 1.
-- **Max Pooling (pool1)**: 2D Max Pooling with kernel size 2 and stride 2.
-- **Conv3**: Convolutional layer with 10 output channels, kernel size 3, and padding of 1.
-- **Conv4**: Convolutional layer with 10 output channels, kernel size 3, and padding of 1.
-- **Max Pooling (pool2)**: 2D Max Pooling with kernel size 2 and stride 2.
-- **Conv5**: Convolutional layer with 10 output channels, kernel size 3.
-- **Conv6**: Convolutional layer with 10 output channels, kernel size 3.
-- **Conv7**: Convolutional layer with 120 output channels, kernel size 3.
-- **Fully Connected (fc)**: Linear layer that outputs 10 values (corresponding to the 10 classes in MNIST).
+The architecture of the model consists of the following layers:
 
-### Dropout Layers
-Dropout layers are used throughout the model with a dropout rate of 10% to prevent overfitting during training.
+1. **Conv1**: A 2D convolutional layer with 10 filters of size 3x3 and padding of 1.
+   - **BatchNorm1**: Batch normalization is applied to the output of Conv1.
+   
+2. **Conv2**: A 2D convolutional layer with 20 filters of size 3x3 and padding of 1.
+   - **BatchNorm2**: Batch normalization is applied to the output of Conv2.
+
+3. **MaxPool1**: A max pooling layer with kernel size 2x2 and stride 2.
+
+4. **Conv3**: A 2D convolutional layer with 10 filters of size 3x3 and padding of 1.
+   - **BatchNorm3**: Batch normalization is applied to the output of Conv3.
+
+5. **Conv4**: A 2D convolutional layer with 10 filters of size 3x3 and padding of 1.
+   - **BatchNorm4**: Batch normalization is applied to the output of Conv4.
+
+6. **MaxPool2**: A second max pooling layer with kernel size 2x2 and stride 2.
+
+7. **Conv5**: A 2D convolutional layer with 10 filters of size 3x3.
+   - **BatchNorm5**: Batch normalization is applied to the output of Conv5.
+
+8. **Conv6**: A 2D convolutional layer with 10 filters of size 3x3.
+   - **BatchNorm6**: Batch normalization is applied to the output of Conv6.
+
+9. **Conv7**: A 2D convolutional layer with 120 filters of size 3x3.
+   - **BatchNorm7**: Batch normalization is applied to the output of Conv7.
+
+10. **Fully Connected Layer**: A fully connected (FC) layer that outputs 10 classes.
+
+11. **Dropout**: A dropout layer with a probability of 0.1 applied after each major operation to prevent overfitting.
+
+## Forward Pass
+
+The forward pass of the network applies the following operations sequentially:
+
+1. Convolution -> BatchNorm -> ReLU -> Pooling (for Conv1, Conv2, Conv3, Conv4)
+2. Dropout after each major operation
+3. Final Convolution -> Fully Connected Layer -> LogSoftmax
+
+
 
 ## Performance
 
 - **Test Accuracy**: Greater than **99.4%** on the MNIST test dataset.
 - **Parameters**: The model has fewer than **20,000 parameters**, making it efficient in terms of model size and computational requirements.
-- Achieves a test accuracy of 99.44% at epoch 11
+- Achieves a test accuracy of 99.47% at epoch 12
 
 ## Training Details
 
