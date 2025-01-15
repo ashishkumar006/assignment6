@@ -27,7 +27,7 @@ jobs:
           pip install jupyter
 
       - name: Convert notebook to Python script
-        run: jupyter nbconvert --to script "assignment_6 final.ipynb"
+        run: jupyter nbconvert --to script "Assignment_6 final.ipynb"
 
 
       - name: Run model checks
