@@ -31,4 +31,4 @@ jobs:
 
 
       - name: Run model checks
-        run: python check_model.py
+        run: python test.py
